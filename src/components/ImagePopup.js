@@ -1,6 +1,10 @@
 import React from 'react';
 
 function ImagePopup(props) {
+  if (!props.card){
+    return null;
+  }
+  else {
     return (
         <div className={ props.card ? "popup popup_opened popup_type_photo-view" : "popup popup_type_photo-view" } >
 
@@ -14,6 +18,7 @@ function ImagePopup(props) {
       
         </div>
     );
+  }
 }
 
 export default ImagePopup;

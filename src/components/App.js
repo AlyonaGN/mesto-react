@@ -21,12 +21,8 @@ function App() {
       setAddPlacePopupOpen(false);
       setEditAvatarPopupOpen(false);
       setisDeleteCardPopupOpen(false);
-      setSelectedCard('');
+      setSelectedCard(null);
     }
-  }
-
-  function handleCardClick() {
-    setSelectedCard();
   }
 
   return (
@@ -35,7 +31,9 @@ function App() {
       <Main onEditProfile={() => setEditProfilePopupOpen(true)} 
         onAddPlace={() => setAddPlacePopupOpen(true)} 
         onEditAvatar={() => setEditAvatarPopupOpen(true)}
-        onCardClick={() => handleCardClick()}
+        onCardClick={function handleCardClick(card){
+          setSelectedCard(card);
+        }}
       />
       <Footer />
 

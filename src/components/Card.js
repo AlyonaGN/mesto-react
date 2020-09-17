@@ -4,7 +4,6 @@ function Card(props) {
     function handleClick() {
         props.onCardClick(props.card);
     }
-
     return (
         <li>
             <figure className="photo-card">

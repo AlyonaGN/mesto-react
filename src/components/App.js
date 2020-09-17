@@ -9,32 +9,37 @@ import ImagePopup from './ImagePopup.js';
 
 function App() {
 
-  let isEditProfilePopupOpen = false;
-  let isAddPlacePopupOpen = false;
-  let isEditAvatarPopupOpen = false;
-  
-  function handleEditAvatarClick(){
-    isEditAvatarPopupOpen = true;
-    console.log(isEditAvatarPopupOpen);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
+  const [isDeleteCardPopupOpen, setisDeleteCardPopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState('');
+
+  function closeAllPopups(event){
+    if (event.target === event.currentTarget) {
+      setEditProfilePopupOpen(false);
+      setAddPlacePopupOpen(false);
+      setEditAvatarPopupOpen(false);
+      setisDeleteCardPopupOpen(false);
+      setSelectedCard('');
+    }
   }
 
-  function handleEditProfileClick(){
-    isEditProfilePopupOpen = true;
-    
-  }
-
-  function handleAddPlaceClick(){
-    isAddPlacePopupOpen = true;
-    
+  function handleCardClick() {
+    setSelectedCard(selectedCard);
   }
 
   return (
-    <div className="page">
+    <>
       <Header />
-      <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}/>
+      <Main onEditProfile={() => setEditProfilePopupOpen(true)} 
+        onAddPlace={() => setAddPlacePopupOpen(true)} 
+        onEditAvatar={() => setEditAvatarPopupOpen(true)}
+        onCardClick={() => handleCardClick()}
+      />
       <Footer />
 
-      <PopupWithForm title="Редактировать профиль" name="profile" isOpen={isEditProfilePopupOpen} >
+      <PopupWithForm title="Редактировать профиль" name="profile" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} >
         <label className="popup__input">
           <input className="popup__field popup__field_name" type="text" name="user-name" minLength="2" maxLength="40" required />
           <span className="popup__field-error"></span>
@@ -48,7 +53,7 @@ function App() {
         <button type="submit" className="popup__submit-button" name="Сохранить">Сохранить</button>
       </PopupWithForm>
 
-      <PopupWithForm title="Новое место" name="add-photo" isOpen={isAddPlacePopupOpen} >
+      <PopupWithForm title="Новое место" name="add-photo" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} >
         <label className="popup__input">
           <input className="popup__field popup__field_photo-description" type="text" placeholder="Название" name="photo-description" minLength="1" maxLength="30" required />
           <span className="popup__field-error"></span>
@@ -62,11 +67,11 @@ function App() {
         <button type="submit" className="popup__submit-button" name="Создать">Создать</button>
       </PopupWithForm>
       
-      <PopupWithForm title="Вы уверены?" name="delete-card" >
+      <PopupWithForm title="Вы уверены?" name="delete-card" isOpen={isDeleteCardPopupOpen} onClose={closeAllPopups} >
         <button type="submit" className="popup__submit-button">Да</button>
       </PopupWithForm>
 
-      <PopupWithForm title="Обновить аватар" name="change-avatar" isOpen={isEditAvatarPopupOpen}>
+      <PopupWithForm title="Обновить аватар" name="change-avatar" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
 
         <label className="popup__input">
           <input className="popup__field popup__field popup__field_photo-link" type="url" placeholder="Ссылка на новый аватар" name="avatar-link" required />
@@ -76,19 +81,8 @@ function App() {
         <button type="submit" className="popup__submit-button" name="Сохранить">Сохранить</button>
       </PopupWithForm>
 
-      <div className="popup popup_type_photo-view">
-
-        <figure className="popup__photo-card-fullscreen">
-
-          <button type="button" className="popup__close-button popup__close-button_small"></button>
-          <img className="popup__photo-fullscreen" alt="здесь должно быть фото, но что-то пошло не так" />
-          <figcaption className="popup__photo-caption"></figcaption>
-
-        </figure>
-    
-      </div>
-
-  </div>
+      <ImagePopup name="change-avatar" card={selectedCard} onClose={closeAllPopups} />
+  </>
   );
 }
 

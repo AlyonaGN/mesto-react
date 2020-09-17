@@ -1,6 +1,6 @@
 @import url(./__header/page__header.css);
 @import url(./__footer/page__footer.css);
-@import url(./__content-conteiner/page__content-conteiner.css);
+@import url(./__content-container/page__content-container.css);
 
 .page {
     max-width: 1200px;
@@ -8,7 +8,6 @@
     margin: 0 auto;
     padding-top: 45px;
     width: 100%;
-    background-color: #000;
     font-family: 'Inter', 'Arial', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

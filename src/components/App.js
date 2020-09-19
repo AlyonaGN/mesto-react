@@ -39,12 +39,12 @@ function App() {
 
       <PopupWithForm title="Редактировать профиль" name="profile" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} >
         <label className="popup__input">
-          <input className="popup__field popup__field_name" type="text" name="user-name" minLength="2" maxLength="40" required />
+          <input className="popup__field popup__field_name" type="text" name="user-name" minLength="2" maxLength="40" placeholder="Имя" required />
           <span className="popup__field-error"></span>
         </label>
 
         <label className="popup__input">
-          <input className="popup__field popup__field_description" type="text" name="profile-description" minLength="2" maxLength="200" required />
+          <input className="popup__field popup__field_description" type="text" name="profile-description" minLength="2" maxLength="200" placeholder="О себе" required />
           <span className="popup__field-error"></span>
         </label>
 

@@ -9,20 +9,12 @@ function Main(props) {
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    api.getUserData().
-      then((userData) => {
+    api.loadAppInfo()
+      .then(([initialCards, userData]) => {
         setUserName(userData.name);
         setUserDescription(userData.about);
         setUserAvatar(userData.avatar);
-      }).
-      catch((error) => {
-        console.log(error);
-    })
-  }, []);
-  
-  React.useEffect(() => {
-    api.getInitialCards().
-      then((initialCards) => {
+
         const cardsFromServer = initialCards.map(card => ({
           src: card.link,
           alt: card.name,
@@ -31,8 +23,8 @@ function Main(props) {
           id: card._id,
         }))
         setCards(cardsFromServer);
-      }).
-      catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
       })
   }, []);

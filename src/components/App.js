@@ -12,7 +12,7 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-  const [isDeleteCardPopupOpen, setisDeleteCardPopupOpen] = React.useState(false);
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
 
   const closeAllPopups = useCallback((event) => {
@@ -20,10 +20,10 @@ function App() {
       setEditProfilePopupOpen(false);
       setAddPlacePopupOpen(false);
       setEditAvatarPopupOpen(false);
-      setisDeleteCardPopupOpen(false);
+      setIsDeleteCardPopupOpen(false);
       setSelectedCard(null);
     }
-  });
+  }, [setEditProfilePopupOpen, setAddPlacePopupOpen, setEditAvatarPopupOpen, setIsDeleteCardPopupOpen, setSelectedCard]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
@@ -15,7 +15,7 @@ function App() {
   const [isDeleteCardPopupOpen, setisDeleteCardPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
 
-  function closeAllPopups(event){
+  const closeAllPopups = useCallback((event) => {
     if (event.target === event.currentTarget) {
       setEditProfilePopupOpen(false);
       setAddPlacePopupOpen(false);
@@ -23,7 +23,7 @@ function App() {
       setisDeleteCardPopupOpen(false);
       setSelectedCard(null);
     }
-  }
+  });
 
   return (
     <>

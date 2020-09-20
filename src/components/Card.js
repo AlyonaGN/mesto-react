@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 function Card(props) {
-    function handleClick() {
+    const handleClick = useCallback(() => {
         props.onCardClick(props.card);
-    }
+    }, [props.card]);
+
     return (
         <li>
             <figure className="photo-card">

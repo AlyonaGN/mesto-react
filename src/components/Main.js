@@ -7,36 +7,37 @@ function Main(props) {
   const [cards, setCards] = React.useState([]);
   const currentUserData = React.useContext(CurrentUserContext);
 
-  const handleCardLike = useCallback((card) => {
-    const isLiked = card.likes.some(i => i._id === currentUserData._id);
-    
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-        // Формируем новый массив на основе имеющегося, подставляя в него новую карточку
-      const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-      // Обновляем стейт
-      setCards(newCards);
-    });
-}, [cards]);
-
   React.useEffect(() => {
     api.getInitialCards()
-      .then((initialCards) => {
-        const cardsFromServer = initialCards.map(card => ({
-          src: card.link,
-          alt: card.name,
-          description: card.name,
-          likes: card.likes,
-          likesAmount: card.likes.length,
-          id: card._id,
-          ownerId: card.owner._id,
-        }))
-        setCards(cardsFromServer);
-
+      .then((cardsFromServer) => {
+        const initialCards = cardsFromServer.map((initialCard) => {
+          return api.createCard(initialCard);
+        })
+        setCards(initialCards);
       })
       .catch((error) => {
         console.log(error);
       })
   }, []);
+  
+  const handleCardLike = useCallback((card) => {
+    const isLiked = card.likes.some(i => i._id === currentUserData._id);
+    
+    api.changeLikeCardStatus(card.id, isLiked).then((newCard) => {
+      newCard = api.createCard(newCard);
+      const newCards = cards.map((c) => c.id === card.id ? newCard : c);
+      setCards(newCards);
+    });
+  }, [setCards, cards, currentUserData]);
+
+  const handleCardDelete = useCallback((card) => {
+      api.deleteCard(card.id);
+      const cardsWithoutDeletedCard = cards.filter((item) => {
+        return item.id !== card.id;
+      });
+      console.log(cardsWithoutDeletedCard);
+      setCards(cardsWithoutDeletedCard);
+  }, [cards]);
 
   if (currentUserData) {
     return (
@@ -63,7 +64,7 @@ function Main(props) {
           <section className="photo-cards">
             
             <ul className="photo-cards__list">
-              {cards.map(card => <Card key={card.id} card={card} onCardClick={props.onCardClick} />)}
+              {cards.map(card => <Card key={card.id} card={card} onCardClick={props.onCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />)}
             </ul>
             
           </section>
@@ -71,7 +72,7 @@ function Main(props) {
     );
   }
   else {
-    return null
+    return null;
   }
   
   

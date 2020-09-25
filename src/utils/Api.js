@@ -13,6 +13,18 @@ class Api {
             });
     }
 
+    createCard(serverCard) {
+        return {
+          src: serverCard.link,
+          alt: serverCard.name,
+          description: serverCard.name,
+          likes: serverCard.likes,
+          likesAmount: serverCard.likes.length,
+          id: serverCard._id,
+          ownerId: serverCard.owner._id,
+        }
+      }
+
     getInitialCards() {
         return fetch(`${this.baseUrl}/cards`, {
             headers: this.headers,
@@ -60,24 +72,25 @@ class Api {
             });
     }
 
-    addLike(cardId) {
-        return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-            method: 'PUT',
-            headers: this.headers,
-        })
-            .then(res => {
-                return this._getResponseData(res);
-            });
-    }
-
-    removeLike(cardId) {
-        return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-            method: 'DELETE',
-            headers: this.headers,
-        })
-            .then(res => {
-                return this._getResponseData(res);
-            });
+    changeLikeCardStatus(cardId, isLiked) {
+        if (!isLiked) {
+            return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+                method: 'PUT',
+                headers: this.headers,
+            })
+                .then(res => {
+                    return this._getResponseData(res);
+                });
+        }
+        else {
+            return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+                method: 'DELETE',
+                headers: this.headers,
+            })
+                .then(res => {
+                    return this._getResponseData(res);
+                });
+        }
     }
 
     changeAvatar(avatarLink) {

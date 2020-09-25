@@ -2,9 +2,11 @@ import React, { useCallback } from 'react';
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
+import { api } from '../utils/Api.js';
 import '../index.css';
 import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './ImagePopup.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
 
 function App() {
@@ -14,6 +16,17 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
+  const [currentUser, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    api.getUserData()
+      .then((userData) => {
+        setUser(userData);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }, []);
 
   const closeAllPopups = useCallback((event) => {
     if (event.target === event.currentTarget) {
@@ -26,7 +39,7 @@ function App() {
   }, [setEditProfilePopupOpen, setAddPlacePopupOpen, setEditAvatarPopupOpen, setIsDeleteCardPopupOpen, setSelectedCard]);
 
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <Header />
       <Main onEditProfile={() => setEditProfilePopupOpen(true)} 
         onAddPlace={() => setAddPlacePopupOpen(true)} 
@@ -80,7 +93,7 @@ function App() {
       </PopupWithForm>
 
       <ImagePopup name="change-avatar" card={selectedCard} onClose={closeAllPopups} />
-  </>
+  </CurrentUserContext.Provider>
   );
 }
 

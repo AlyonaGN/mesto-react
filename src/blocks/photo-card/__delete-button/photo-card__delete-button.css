@@ -13,6 +13,7 @@
     box-shadow: none;
     cursor: pointer;
     background-position: center;
+    display: none;
 }
 
   .photo-card__delete-button:hover {

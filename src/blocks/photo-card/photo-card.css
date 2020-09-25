@@ -5,6 +5,7 @@
 @import url(./__like/photo-card__like.css);
 @import url(./__likes-amount/photo-card__likes-amount.css);
 @import url(./__delete-button/photo-card__delete-button.css);
+@import url(./__delete-button/_visible/photo-card__delete-button_visible.css);
 
 
 .photo-card {

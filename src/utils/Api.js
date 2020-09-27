@@ -39,8 +39,8 @@ class Api {
             method: 'PATCH',
             headers: this.headers,
             body: JSON.stringify({
-                name: formValues['user-name'],
-                about: formValues['profile-description']
+                name: formValues.name,
+                about: formValues.about
             })
         })
             .then(res => {

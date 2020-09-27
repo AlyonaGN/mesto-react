@@ -5,6 +5,7 @@ import Footer from './Footer.js';
 import { api } from '../utils/Api.js';
 import '../index.css';
 import PopupWithForm from './PopupWithForm.js';
+import EditProfilePopup from './EditProfilePopup.js';
 import ImagePopup from './ImagePopup.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -28,8 +29,10 @@ function App() {
       })
   }, []);
 
-  const closeAllPopups = useCallback((event) => {
-    if (event.target === event.currentTarget) {
+  const closeAllPopups = useCallback((event, syntheticEventTarget, syntheticEventCurrentTarget) => {
+    if (event.target === event.currentTarget || 
+      syntheticEventTarget === syntheticEventCurrentTarget) {
+      console.log(event);
       setEditProfilePopupOpen(false);
       setAddPlacePopupOpen(false);
       setEditAvatarPopupOpen(false);
@@ -37,6 +40,18 @@ function App() {
       setSelectedCard(null);
     }
   }, [setEditProfilePopupOpen, setAddPlacePopupOpen, setEditAvatarPopupOpen, setIsDeleteCardPopupOpen, setSelectedCard]);
+
+  const handleUpdateUser = useCallback((e, submitEventTarget, submitEventCurTarget, formValues) => {
+    api.editProfile(formValues)
+      .then((res) => {
+        setUser(res);
+        console.log(e);
+        closeAllPopups(e, submitEventTarget, submitEventCurTarget);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }, [closeAllPopups]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -50,19 +65,7 @@ function App() {
       />
       <Footer />
 
-      <PopupWithForm title="Редактировать профиль" name="profile" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} >
-        <label className="popup__input">
-          <input className="popup__field popup__field_name" type="text" name="user-name" minLength="2" maxLength="40" placeholder="Имя" required />
-          <span className="popup__field-error"></span>
-        </label>
-
-        <label className="popup__input">
-          <input className="popup__field popup__field_description" type="text" name="profile-description" minLength="2" maxLength="200" placeholder="О себе" required />
-          <span className="popup__field-error"></span>
-        </label>
-
-        <button type="submit" className="popup__submit-button" name="Сохранить">Сохранить</button>
-      </PopupWithForm>
+      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser}/> 
 
       <PopupWithForm title="Новое место" name="add-photo" isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} >
         <label className="popup__input">

@@ -6,6 +6,7 @@ import { api } from '../utils/Api.js';
 import '../index.css';
 import PopupWithForm from './PopupWithForm.js';
 import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
 import ImagePopup from './ImagePopup.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -29,24 +30,31 @@ function App() {
       })
   }, []);
 
-  const closeAllPopups = useCallback((event, syntheticEventTarget, syntheticEventCurrentTarget) => {
-    if (event.target === event.currentTarget || 
-      syntheticEventTarget === syntheticEventCurrentTarget) {
-      console.log(event);
-      setEditProfilePopupOpen(false);
-      setAddPlacePopupOpen(false);
-      setEditAvatarPopupOpen(false);
-      setIsDeleteCardPopupOpen(false);
-      setSelectedCard(null);
-    }
+  const closeAllPopups = useCallback(() => {
+    setEditProfilePopupOpen(false);
+    setAddPlacePopupOpen(false);
+    setEditAvatarPopupOpen(false);
+    setIsDeleteCardPopupOpen(false);
+    setSelectedCard(null);
   }, [setEditProfilePopupOpen, setAddPlacePopupOpen, setEditAvatarPopupOpen, setIsDeleteCardPopupOpen, setSelectedCard]);
 
-  const handleUpdateUser = useCallback((e, submitEventTarget, submitEventCurTarget, formValues) => {
+  const handleUpdateUser = useCallback((formValues) => {
     api.editProfile(formValues)
       .then((res) => {
         setUser(res);
-        console.log(e);
-        closeAllPopups(e, submitEventTarget, submitEventCurTarget);
+        closeAllPopups();
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }, [closeAllPopups]);
+
+  const handleUpdateAvatar = useCallback((avatarObject) => {
+    console.log(avatarObject.avatar);
+    api.changeAvatar(avatarObject.avatar)
+      .then((updatedUserData) => {
+        setUser(updatedUserData);
+        closeAllPopups();
       })
       .catch((error) => {
         console.log(error);
@@ -85,15 +93,7 @@ function App() {
         <button type="submit" className="popup__submit-button">Да</button>
       </PopupWithForm>
 
-      <PopupWithForm title="Обновить аватар" name="change-avatar" isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}>
-
-        <label className="popup__input">
-          <input className="popup__field popup__field popup__field_photo-link" type="url" placeholder="Ссылка на новый аватар" name="avatar-link" required />
-          <span className="popup__field-error"></span>
-        </label>
-
-        <button type="submit" className="popup__submit-button" name="Сохранить">Сохранить</button>
-      </PopupWithForm>
+      <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
 
       <ImagePopup name="change-avatar" card={selectedCard} onClose={closeAllPopups} />
   </CurrentUserContext.Provider>

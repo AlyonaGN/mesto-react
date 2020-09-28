@@ -10,22 +10,15 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
 
     const handleNameChange = useCallback((e) => {
         setName(e.target.value);
-        console.log('ooooooaaaa');
     }, [setName]);
 
     const handleDescriptionChange = useCallback((e) => {
         setDescription(e.target.value);
-        console.log('ooooooaaaa');
     }, [setDescription]);
 
     const handleSubmit = useCallback((e) => {
-        console.log('ooooooaaaa');
-        e.persist();
-        const submitEventTarget = e.target;
-        const submitEventCurTarget = e.currentTarget;
-        const syntheticEventOnSubmitClick = e;
-        syntheticEventOnSubmitClick.preventDefault();
-        onUpdateUser(syntheticEventOnSubmitClick, submitEventTarget, submitEventCurTarget, {
+        e.preventDefault();
+        onUpdateUser({
             name,
             about: description,
         });
@@ -36,7 +29,6 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
         if (currentUserData) {
             setName(currentUserData.name);
             setDescription(currentUserData.about);
-            //добавить очистку полей через return () =>
         }
     }, [currentUserData]); 
  

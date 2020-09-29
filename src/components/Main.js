@@ -1,43 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import { api } from '../utils/Api.js';
 import Card from './Card.js';
 
 function Main(props) {
-  const [cards, setCards] = React.useState([]);
   const currentUserData = React.useContext(CurrentUserContext);
-
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then((cardsFromServer) => {
-        const initialCards = cardsFromServer.map((initialCard) => {
-          return api.createCard(initialCard);
-        })
-        setCards(initialCards);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  }, []);
-  
-  const handleCardLike = useCallback((card) => {
-    const isLiked = card.likes.some(i => i._id === currentUserData._id);
-    
-    api.changeLikeCardStatus(card.id, isLiked).then((newCard) => {
-      newCard = api.createCard(newCard);
-      const newCards = cards.map((c) => c.id === card.id ? newCard : c);
-      setCards(newCards);
-    });
-  }, [setCards, cards, currentUserData]);
-
-  const handleCardDelete = useCallback((card) => {
-      api.deleteCard(card.id);
-      const cardsWithoutDeletedCard = cards.filter((item) => {
-        return item.id !== card.id;
-      });
-      console.log(cardsWithoutDeletedCard);
-      setCards(cardsWithoutDeletedCard);
-  }, [cards]);
 
   if (currentUserData) {
     return (
@@ -64,7 +30,7 @@ function Main(props) {
           <section className="photo-cards">
             
             <ul className="photo-cards__list">
-              {cards.map(card => <Card key={card.id} card={card} onCardClick={props.onCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />)}
+              {props.cards.map(card => <Card key={card.id} card={card} onCardClick={props.onCardClick} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} />)}
             </ul>
             
           </section>

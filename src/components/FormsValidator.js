@@ -4,29 +4,24 @@ import { editProfileValidators } from '../utils/editProfileValidators.js';
 class FormsValidator {
 
     validateEditProfileNameInput(nameInputValue) {
-        console.log(nameInputValue);
-        const userNameValidationResult = Object.keys(editProfileValidators.userName)
-            .map((errorKey) => {
+        let result = {}
+        Object.keys(editProfileValidators.userName)
+            .forEach((errorKey) => {
                 const errorResult = editProfileValidators.userName[errorKey](nameInputValue);
-
-                return { [errorKey]: errorResult };
+                result[errorKey] = errorResult;
             });
-
-        return userNameValidationResult;
+        return result;
     }
 
     validateEditProfileDescriptionInput(descriptionInputValue) {
-
-        const descriptionValidationResult = Object.keys(editProfileValidators.description)
-            .map((errorKey) => {
+        let result = {}
+        Object.keys(editProfileValidators.profileDescription)
+            .forEach((errorKey) => {
                 const errorResult = editProfileValidators.profileDescription[errorKey](descriptionInputValue);
-
-                return { [errorKey]: errorResult };
+                result[errorKey] = errorResult;
             });
-
-        return descriptionValidationResult;
-    }
-    
+        return result;
+    }   
 }
 
 export const formsValidator = new FormsValidator();

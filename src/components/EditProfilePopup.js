@@ -12,14 +12,14 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
 
     const [errors, setErrors] = React.useState({
         userNameErrors: {
-            required: true,
-            minLength: true,
-            maxLength: true,
+            required: false,
+            minLength: false,
+            maxLength: false,
         },
         profileDescriptionErrors: {
-            required: true,
-            minLength: true,
-            maxLength: true,
+            required: false,
+            minLength: false,
+            maxLength: false,
         }
     });
 
@@ -41,48 +41,45 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
         }
     }, [currentUserData]);
 
-    const handleNameValidation = useCallback((inputValue) => {
-        const userNameValidationResult = formsValidator.validateEditProfileNameInput(inputValue);
-        console.log(userNameValidationResult);
-        setErrors({
-            userNameErrors: userNameValidationResult,
-        });
-    });
-
-
-    const handleDescriptionValidation = useCallback((inputValue) => {
-        const userNameValidationResult = formsValidator.validateEditProfileDescriptionInput(inputValue);
-
-        setErrors({
-            userNameErrors: userNameValidationResult,
-        });
-    });
-
     const handleNameChange = useCallback((e) => {
         const { name, value } = e.target;
         setFormValues((prevState) => ({ ...prevState, [name]: value }));
-        handleNameValidation(value);
-    }, [setFormValues, handleNameValidation]);
+        const userNameValidationResult = formsValidator.validateEditProfileNameInput(value);
+        setErrors((prevState) => ({...prevState, 
+            userNameErrors: userNameValidationResult,
+        }));
+    }, [setFormValues, setErrors]);
 
     const handleDescriptionChange = useCallback((e) => {
         const { name, value } = e.target;
         setFormValues((prevState) => ({...prevState, [name]: value}));
-        handleDescriptionValidation(value);
-    }, [setFormValues, handleDescriptionValidation]);
+        const profileDescriptionValidationResult = formsValidator.validateEditProfileDescriptionInput(value);
+        setErrors((prevState) => ({...prevState, 
+            profileDescriptionErrors: profileDescriptionValidationResult,
+        }));
+    }, [setFormValues, setErrors]);
+
+    const isUserNameInvalid = Object.values(errors.userNameErrors).some(Boolean);
+    const isDescriptionInvalid = Object.values(errors.profileDescriptionErrors).some(Boolean);
+    const isSubmitDisabled = isUserNameInvalid || isDescriptionInvalid;
  
     return (
         <PopupWithForm title="Редактировать профиль" name="profile" isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} >
         <label className="popup__input">
           <input className="popup__field popup__field_name" value={formValues.userName} onChange={handleNameChange} type="text" name="userName" placeholder="Имя" />
-          <span className="popup__field-error"></span>
+          {errors.userNameErrors.required && <span className="popup__field-error">Пожалуйста, заполните поле</span>}
+          {errors.userNameErrors.minLength && <span className="popup__field-error">Минимальная длина имени - 2 символа</span>}
+          {errors.userNameErrors.maxLength && <span className="popup__field-error">Максимальная длина имени - 40 символов</span>}
         </label>
 
         <label className="popup__input">
           <input className="popup__field popup__field_description" value={formValues.profileDescription} onChange={handleDescriptionChange} type="text" name="profileDescription" placeholder="О себе" />
-          <span className="popup__field-error"></span>
+          {errors.profileDescriptionErrors.required && <span className="popup__field-error">Пожалуйста, заполните поле</span>}
+          {errors.profileDescriptionErrors.minLength && <span className="popup__field-error">Минимальная длина описания - 2 символа</span>}
+          {errors.profileDescriptionErrors.maxLength && <span className="popup__field-error">Максимальная длина описания - 200 символов</span>}
         </label>
 
-        <button type="submit" className="popup__submit-button" onClick={handleSubmit} name="Сохранить">Сохранить</button>
+        <button type="submit" disabled={isSubmitDisabled} className="popup__submit-button" onClick={handleSubmit} name="Сохранить">Сохранить</button>
       </PopupWithForm>
     );
 

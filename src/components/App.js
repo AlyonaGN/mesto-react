@@ -59,15 +59,16 @@ function App() {
     setSelectedCard(null);
   }, [setEditProfilePopupOpen, setAddPlacePopupOpen, setEditAvatarPopupOpen, setIsDeleteCardPopupOpen, setSelectedCard]);
 
-  const handleDeleteCard = useCallback(() => {
-      const cardId = cardToBeDeleted.id;
-      console.log(cardId);
+  const handleDeleteCard = useCallback(() => { 
+    const cardId = cardToBeDeleted.id;
       api.deleteCard(cardId)
       .then(() => {
         const cardsWithoutDeletedCard = cards.filter((item) => {
           return item.id !== cardId;
         })
         setCards(cardsWithoutDeletedCard);
+      })
+      .then(() => {
         closeAllPopups();
       })
       .catch((error) => {

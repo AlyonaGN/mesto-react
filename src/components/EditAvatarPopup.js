@@ -26,7 +26,7 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar}) {
           <span className="popup__field-error"></span>
         </label>
 
-        <button type="submit" className="popup__submit-button" name="Сохранить" onClick={handleSubmit}>Сохранить</button>
+        <button className="popup__submit-button" name="Сохранить" onClick={handleSubmit}>Сохранить</button>
       </PopupWithForm>
     );
 

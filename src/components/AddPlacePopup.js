@@ -42,7 +42,7 @@ function AddPlacePopup({ isOpen, onClose, onAddCard }) {
                 <span className="popup__field-error"></span>
             </label>
 
-            <button type="submit" className="popup__submit-button" name="Создать" onClick={handleSubmit}>Создать</button>
+            <button className="popup__submit-button" name="Создать" onClick={handleSubmit}>Создать</button>
         </PopupWithForm>
     );
 

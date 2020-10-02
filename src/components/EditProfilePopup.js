@@ -79,7 +79,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
           {errors.profileDescriptionErrors.maxLength && <span className="popup__field-error">Максимальная длина описания - 200 символов</span>}
         </label>
 
-        <button type="submit" disabled={isSubmitDisabled} className="popup__submit-button" onClick={handleSubmit} name="Сохранить">Сохранить</button>
+        <button disabled={isSubmitDisabled} className="popup__submit-button" onClick={handleSubmit} name="Сохранить">Сохранить</button>
       </PopupWithForm>
     );
 
